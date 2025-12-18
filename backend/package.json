@@ -13,8 +13,10 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "bullmq": "^5.66.1",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
+    "ioredis": "^5.8.2",
     "puppeteer": "^24.33.1"
   }
 }

@@ -4,11 +4,29 @@ import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { createTask } from "../lib/api";
 import TaskCard from "./components/TaskCard";
+import { isValidUrl } from "../lib/validater";
 
 export default function Home() {
   const [url, setUrl] = useState("");
   const [question, setQuestion] = useState("");
   const [tasks, setTasks] = useState<{ id: string; question: string }[]>([]);
+  const [urlError, setUrlError] = useState(false);
+
+  const handleUrlBlur = () => {
+    if (url && !isValidUrl(url)) {
+      setUrlError(true);
+    }
+  };
+
+  const handleSubmit = () => {
+    if (!isValidUrl(url)) {
+      setUrlError(true);
+      return; // Stop right here!
+    }
+
+    setUrlError(false);
+    createTaskMutation.mutate();
+  };
 
   const createTaskMutation = useMutation({
     mutationFn: () => createTask(url, question),
@@ -27,31 +45,41 @@ export default function Home() {
     <main className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 flex flex-col items-center">
       <div className="w-full max-w-2xl space-y-8">
 
-        {/* 1. The Main "Asker" Card */}
         <div className="bg-white rounded-2xl shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden">
 
-          {/* Header */}
           <div className="bg-gray-50/50 px-8 py-6 border-b border-gray-100">
             <h1 className="text-xl font-bold text-gray-900 flex items-center gap-2">
-              🤖 <span className="tracking-tight">Web Scraper AI</span>
+              <span className="tracking-tight">Web Scraper AI</span>
             </h1>
             <p className="text-sm text-gray-500 mt-1">
               Paste a URL and let the AI analyze it for you.
             </p>
           </div>
 
-          {/* Form Body */}
           <div className="p-8 space-y-5">
             <div className="space-y-1">
               <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider ml-1">
                 Target Website
               </label>
               <input
-                className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-900 placeholder:text-gray-400 focus:border-indigo-500 focus:bg-white focus:ring-4 focus:ring-indigo-500/10 transition-all duration-200 outline-none"
+                className={`w-full rounded-xl border px-4 py-3 text-sm transition-all outline-none 
+                  ${urlError
+                    ? "border-red-500 bg-red-50 text-red-900 placeholder:text-red-300 focus:ring-red-200"
+                    : "border-gray-200 bg-gray-50 text-gray-900 placeholder:text-gray-400 focus:border-indigo-500 focus:bg-white focus:ring-4 focus:ring-indigo-500/10"
+                  }`}
                 placeholder="https://example.com"
                 value={url}
-                onChange={(e) => setUrl(e.target.value)}
+                onBlur={handleUrlBlur}
+                onChange={(e) => {
+                  setUrl(e.target.value);
+                  if (urlError) setUrlError(false);
+                }}
               />
+              {urlError && (
+                <p className="text-xs text-red-500 font-medium ml-1 animate-pulse">
+                  Please enter a valid URL (including http:// or https://)
+                </p>
+              )}
             </div>
 
             <div className="space-y-1">
@@ -67,7 +95,7 @@ export default function Home() {
             </div>
 
             <button
-              onClick={() => createTaskMutation.mutate()}
+              onClick={handleSubmit}
               disabled={createTaskMutation.isPending || !url || !question}
               className="w-full rounded-xl bg-indigo-600 py-3.5 text-sm font-semibold text-white shadow-lg shadow-indigo-500/30 hover:bg-indigo-700 hover:shadow-indigo-500/40 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none transition-all duration-200"
             >
@@ -86,7 +114,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* 2. The Results Feed */}
         <div className="space-y-4">
           {tasks.length > 0 && (
             <h2 className="text-sm font-bold text-gray-400 uppercase tracking-wider px-2">
@@ -96,7 +123,7 @@ export default function Home() {
 
           {tasks.map((task) => (
             <TaskCard
-              key={task.id} // REMEMBER: Use task.id, not index!
+              key={task.id}
               taskId={task.id}
               question={task.question}
             />
@@ -104,7 +131,6 @@ export default function Home() {
 
           {tasks.length === 0 && (
             <div className="text-center py-12 opacity-50">
-              <div className="text-4xl mb-3">👻</div>
               <p className="text-gray-500 text-sm">No tasks yet. Start by asking a question!</p>
             </div>
           )}

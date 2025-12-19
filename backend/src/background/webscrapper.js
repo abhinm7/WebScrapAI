@@ -7,10 +7,10 @@ const fetchWebContent = async (url) => {
 
         const browser = await puppeteer.launch({
             headless: 'new',
-            args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', '--disable-gpu', '--single-process','--no-zygote'],
+            args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', '--disable-gpu', '--single-process', '--no-zygote'],
         });
 
-        console.log('Chrome path:', puppeteer.executablePath());
+        console.log('Chrome path:', process.env.PUPPETEER_EXECUTABLE_PATH || puppeteer.executablePath());
 
 
         const page = await browser.newPage();

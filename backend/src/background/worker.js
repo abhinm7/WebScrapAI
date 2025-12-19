@@ -4,27 +4,25 @@ const { connection } = require('./queue.js');
 const puppeteer = require('puppeteer');
 const { fetchTask, updateTask } = require('../db/queries.js');
 const fetchWebContent = require('./webscrapper.js');
+const generateAnswer = require('./gemini.js');
 
 const worker = new Worker('tasks', async (job) => {
+
   const { url, question } = job.data;
-  console.log(url, question)
 
   // Change the task status > Proccessing
   await updateTask(job.id, { status: 'processing' });
-  console.log(`Processing job ${job.id}`);
 
   //scrape the data from web url
   const content = await fetchWebContent(url);
-  
 
-  const answer = `
-Question: ${question}
-Based on website content:
-${content.slice(0, 500)}...
-`;
-  updateTask(job.id, { status: 'compeleted', answer, })
+  //generate answer using gemini API
+  const answer = await generateAnswer(content, question);
+
+  updateTask(job.id, { status: 'completed', answer, })
 
   return true;
+
 }, {
   connection,
   concurrency: 1,
@@ -35,9 +33,8 @@ worker.on('ready', () => {
 });
 
 worker.on('completed', async (job, result) => {
-  console.log("hello")
   const data = await fetchTask(job.id)
-  console.log("job:", data, "::", result)
+  console.log("\n\n\njob:", data,"\n\n\n")
 })
 
 worker.on('error', (err) => {

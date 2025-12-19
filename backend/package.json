@@ -13,6 +13,7 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
     "bullmq": "^5.66.1",
     "dotenv": "^17.2.3",
     "drizzle-orm": "^0.45.1",

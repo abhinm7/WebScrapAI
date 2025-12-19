@@ -9,17 +9,18 @@ const generateAnswer = async (content, question) => {
         const prompt = `You are a helpful assistant. Below is the text content scraped from a website.Please answer the user's question using ONLY the provided information.
         WEB CONTENT:${content}
         USER QUESTION:${question}`;
-
+        
+        return "lorem ipsum lorem ipsum ***lorem*** ipsum lorem ipsum lorem ipsum"
         //generate answer using the scrapped content and question
         const result = await model.generateContent(prompt);
         const response = await result.response;
         const text = response.text();
-        
+
         //return the generated answer
         return text;
 
     } catch (err) {
-        console.err("Gemini API error:", err.message);
+        console.error("Gemini API error:", err.message);
         throw new Error("Failed to process the content with AI");
     }
 }

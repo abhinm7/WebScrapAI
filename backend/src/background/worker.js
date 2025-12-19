@@ -9,16 +9,14 @@ const generateAnswer = require('./gemini.js');
 const worker = new Worker('tasks', async (job) => {
 
   const { url, question } = job.data;
-
   // Change the task status > Proccessing
   await updateTask(job.id, { status: 'processing' });
 
   //scrape the data from web url
   const content = await fetchWebContent(url);
-
   //generate answer using gemini API
   const answer = await generateAnswer(content, question);
-
+  
   updateTask(job.id, { status: 'completed', answer, })
 
   return true;

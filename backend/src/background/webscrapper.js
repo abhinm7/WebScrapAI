@@ -7,7 +7,6 @@ const fetchWebContent = async (url) => {
 
         const browser = await puppeteer.launch({
             headless: 'new',
-            executablePath: puppeteer.executablePath(), //explicitly tell the puppeeter to use installed chrome
             args: ['--no-sandbox', '--disable-setuid-sandbox'],
         });
 

@@ -1,4 +1,4 @@
-require('dotenv').config({ path: '../../.env' });
+require('dotenv').config();
 const { Worker } = require('bullmq');
 const { connection } = require('./queue.js');
 const puppeteer = require('puppeteer');

@@ -1,10 +1,10 @@
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-
+    
 const generateAnswer = async (content, question) => {
     try {
-        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+        const model = genAI.getGenerativeModel({ model: process.env.GEMINI_MODEL });
 
         const prompt = `You are a helpful assistant. Below is the text content scraped from a website.Please answer the user's question using ONLY the provided information.
         WEB CONTENT:${content}

@@ -10,7 +10,7 @@ Create a .env file in the backend folder:
 
 Code snippet:
 ```
-PORT=3000
+PORT=4000
 DATABASE_URL=postgresql://user:password@localhost:5432/webscrapai
 REDIS_URL=redis://localhost:6379
 ```

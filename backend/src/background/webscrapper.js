@@ -5,14 +5,8 @@ const fetchWebContent = async (url) => {
 
     try {
 
-        const browser = await puppeteer.launch({
-            headless: 'new',
-            args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', '--disable-gpu', '--single-process', '--no-zygote'],
-        });
-
-        console.log('Chrome path:', process.env.PUPPETEER_EXECUTABLE_PATH || puppeteer.executablePath());
-
-
+        const browser = await puppeteer.launch();
+        
         const page = await browser.newPage();
 
         //wait until dom content loaded
@@ -20,11 +14,7 @@ const fetchWebContent = async (url) => {
             waitUntil: 'domcontentloaded',
             timeout: 10000 // 10 seconds max waiting
         });
-        //wait for client side hydration 
-        await page.waitForFunction(
-            () => document.body.innerText.length > 200,
-            { timeout: 15000 }
-        );
+        
         //Fetch content
         const content = await page.evaluate(() => {
             // Get text, remove massive whitespace, trim

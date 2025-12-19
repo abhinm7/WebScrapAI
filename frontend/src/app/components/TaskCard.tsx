@@ -22,7 +22,6 @@ export default function TaskCard({
     queryFn: () => fetchTask(taskId),
     enabled: !!taskId,
     refetchInterval: (query) => {
-      console.log("fetch",query.state)
       const status = query.state.data?.task?.status;
       if (status === "completed" || status === "failed") {
         return false;

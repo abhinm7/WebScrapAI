@@ -23,7 +23,7 @@ const worker = new Worker('tasks', async (job) => {
   } else {
     answer = await generateAnswer(content, question);
   }
-
+  console.log("answer :",answer)
   updateTask(job.id, { status: 'completed', answer, })
 
   return true;
@@ -38,8 +38,8 @@ worker.on('ready', () => {
 });
 
 worker.on('completed', async (job, result) => {
-  const data = await fetchTask(job.id)
-  console.log("\n\n\njob:", data, "\n\n\n")
+  const data = await fetchTask(job.id);
+  console.log(data.id,":fetched sucesfully")
 })
 
 worker.on('error', (err) => {

@@ -14,9 +14,8 @@ const worker = new Worker('tasks', async (job) => {
   console.log(`Processing job ${job.id}`);
 
   //scrape the data from web url
-  const content = fetchWebContent(url);
-
-  console.log('content', content);
+  const content = await fetchWebContent(url);
+  
 
   const answer = `
 Question: ${question}

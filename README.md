@@ -20,7 +20,7 @@ A full-stack application where users submit a website URL and a question. The sy
 * Node.js 18+
 * Redis (local or cloud)
 * PostgreSQL
-* Google Chrome (for Puppeteer)
+* Chromium (automatically downloaded by Puppeteer)
 
 ### Clone Repository
 ```bash

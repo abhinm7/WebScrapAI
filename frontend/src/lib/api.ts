@@ -14,6 +14,8 @@ export async function createTask(url: string, question: string) {
 
 export async function fetchTask(id: string) {
     try {
+        console.log("hei");
+        
         const res = await api.get(`/tasks/${id}`);
         return res.data;
     } catch (err) {

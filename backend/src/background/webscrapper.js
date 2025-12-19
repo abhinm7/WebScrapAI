@@ -4,11 +4,16 @@ const fetchWebContent = async (url) => {
     let browser = null;
 
     try {
-        browser = await puppeteer.launch({
-            headless: true,
-            // Add these to  prevent crashes in docker environment
-            args: ['--no-sandbox', '--disable-setuid-sandbox']
+
+        const browser = await puppeteer.launch({
+            headless: 'new',
+            executablePath: puppeteer.executablePath(), //explicitly tell the puppeeter to use installed chrome
+            args: ['--no-sandbox', '--disable-setuid-sandbox'],
         });
+
+        console.log('Chrome path:', puppeteer.executablePath());
+
+
         const page = await browser.newPage();
 
         //wait until dom content loaded

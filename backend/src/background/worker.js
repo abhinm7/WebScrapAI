@@ -15,8 +15,15 @@ const worker = new Worker('tasks', async (job) => {
   //scrape the data from web url
   const content = await fetchWebContent(url);
   //generate answer using gemini API
-  const answer = await generateAnswer(content, question);
-  
+  let answer;
+
+  //generete answer using only if the content generated is not null
+  if (content == null) {
+    answer = "I am sorry, but the provided web content is null. Therefore, I cannot tell you what the website is for.";
+  } else {
+    answer = await generateAnswer(content, question);
+  }
+
   updateTask(job.id, { status: 'completed', answer, })
 
   return true;
@@ -32,7 +39,7 @@ worker.on('ready', () => {
 
 worker.on('completed', async (job, result) => {
   const data = await fetchTask(job.id)
-  console.log("\n\n\njob:", data,"\n\n\n")
+  console.log("\n\n\njob:", data, "\n\n\n")
 })
 
 worker.on('error', (err) => {

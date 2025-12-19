@@ -4,13 +4,12 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 const generateAnswer = async (content, question) => {
     try {
-        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash-lite" });
+        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
         const prompt = `You are a helpful assistant. Below is the text content scraped from a website.Please answer the user's question using ONLY the provided information.
         WEB CONTENT:${content}
-        USER QUESTION:${question}`;
-        
-        return "lorem ipsum lorem ipsum ***lorem*** ipsum lorem ipsum lorem ipsum"
+        USER QUESTION:${question}`
+
         //generate answer using the scrapped content and question
         const result = await model.generateContent(prompt);
         const response = await result.response;
@@ -21,7 +20,7 @@ const generateAnswer = async (content, question) => {
 
     } catch (err) {
         console.error("Gemini API error:", err.message);
-        throw new Error("Failed to process the content with AI");
+        return "Too many requests, please try again later"
     }
 }
 

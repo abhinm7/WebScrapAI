@@ -2,21 +2,25 @@ const puppeteer = require('puppeteer');
 
 const fetchWebContent = async (url) => {
     let browser = null;
-    
+
     try {
         browser = await puppeteer.launch({
             headless: true,
             // Add these to  prevent crashes in docker environment
-            args: ['--no-sandbox', '--disable-setuid-sandbox'] 
+            args: ['--no-sandbox', '--disable-setuid-sandbox']
         });
         const page = await browser.newPage();
 
         //wait until dom content loaded
-        await page.goto(url, { 
-            waitUntil: 'domcontentloaded', 
+        await page.goto(url, {
+            waitUntil: 'domcontentloaded',
             timeout: 10000 // 10 seconds max waiting
         });
-
+        //wait for client side hydration 
+        await page.waitForFunction(
+            () => document.body.innerText.length > 200,
+            { timeout: 15000 }
+        );
         //Fetch content
         const content = await page.evaluate(() => {
             // Get text, remove massive whitespace, trim

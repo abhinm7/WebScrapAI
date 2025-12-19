@@ -26,3 +26,10 @@ A full-stack application where users submit a website URL and a question. The sy
 ```bash
 git clone https://github.com/abhinm7/WebScrapAI.git
 cd webscrapai
+```
+
+### [Backend Setup](./BACKEND.md)
+> *Go here to set up the API, Database, Redis, and Background Worker.*
+
+### [Frontend Setup](./FRONTEND.md)
+> *Go here to set up the Next.js client and environment.*
